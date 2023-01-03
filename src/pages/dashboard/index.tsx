@@ -5,6 +5,11 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import DashTable from "../../components/DashTable";
 
 const DashboardPage: NextPage = () => {
+  const handleFetch = async () => {
+    const res = await fetch("http://localhost:3000/api/getSubmissions");
+    const data = await res.json();
+    console.log(data);
+  };
   return (
     <>
       <Head>
@@ -14,6 +19,7 @@ const DashboardPage: NextPage = () => {
       </Head>
       <main className="flex min-h-screen flex-col items-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         {useSession().data?.user ? <Dashboard /> : <NoAuth />}
+        <button onClick={handleFetch}>Fetch</button>
       </main>
     </>
   );

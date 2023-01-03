@@ -1,6 +1,4 @@
-import React from "react";
-
-const DashTable: React.FC = () => {
+const DashTable: React.FC = (props: any) => {
   return (
     <>
       <table className="table-auto">
@@ -27,6 +25,10 @@ const DashTable: React.FC = () => {
           </tr>
         </tbody>
       </table>
+      <p>{props.id}</p>
+      <p>{props.name}</p>
+      <p>{props.email}</p>
+      <p>{props.message}</p>
     </>
   );
 };
