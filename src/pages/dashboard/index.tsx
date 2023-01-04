@@ -1,15 +1,10 @@
 import Head from "next/head";
-import type { NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
 import { useSession, signIn, signOut } from "next-auth/react";
 
-import DashTable from "../../components/DashTable";
+import DashTableHead from "../../components/DashTableHead";
 
-const DashboardPage: NextPage = () => {
-  const handleFetch = async () => {
-    const res = await fetch("http://localhost:3000/api/getSubmissions");
-    const data = await res.json();
-    console.log(data);
-  };
+const DashboardPage: NextPage = ({ data }) => {
   return (
     <>
       <Head>
@@ -18,8 +13,14 @@ const DashboardPage: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        {useSession().data?.user ? <Dashboard /> : <NoAuth />}
-        <button onClick={handleFetch}>Fetch</button>
+        {useSession().data?.user ? (
+          <>
+            <Dashboard />
+            <DashTableHead data={data} />
+          </>
+        ) : (
+          <NoAuth />
+        )}
       </main>
     </>
   );
@@ -45,7 +46,17 @@ const Dashboard: React.FC = () => {
       <button onClick={() => signOut()} className="py-4 text-white">
         Sign Out
       </button>
-      <DashTable />
     </>
   );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  const res = await fetch("http://localhost:3000/api/getSubmissions");
+  const data = await res.json();
+  console.log(data);
+  return {
+    props: {
+      data,
+    },
+  };
 };
