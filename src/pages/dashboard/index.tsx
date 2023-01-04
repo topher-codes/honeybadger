@@ -4,7 +4,11 @@ import { useSession, signIn, signOut } from "next-auth/react";
 
 import DashTableHead from "../../components/DashTableHead";
 
+import { api } from "../../utils/api";
+
 const DashboardPage: NextPage = ({ data }) => {
+  const email = useSession().data?.user?.email;
+  const result = api.example.getUser.useQuery({ text: email });
   return (
     <>
       <Head>
@@ -17,6 +21,7 @@ const DashboardPage: NextPage = ({ data }) => {
           <>
             <Dashboard />
             <DashTableHead data={data} />
+            <p>Hello {result.data?.name}</p>
           </>
         ) : (
           <NoAuth />
